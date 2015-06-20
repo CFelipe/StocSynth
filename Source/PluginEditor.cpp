@@ -17,7 +17,7 @@ void StocSynthAudioProcessorEditor::paint (Graphics& g)
 
     g.setColour (Colours::black);
     g.setFont (15.0f);
-    g.drawFittedText ("4", getLocalBounds(), Justification::centred, 1);
+    g.drawFittedText ("9", getLocalBounds(), Justification::centred, 1);
 }
 
 void StocSynthAudioProcessorEditor::resized()

@@ -46,13 +46,22 @@ void SquareWaveVoice::renderNextBlock (AudioSampleBuffer& outputBuffer, int star
         {
             while (--numSamples >= 0)
             {
-                const float currentSample = (float) (sin (currentAngle) * level * tailOff);
+                float currentSample;
+                
+                if (currentAngle < double_Pi) {
+                    currentSample = level * tailOff;
+                } else {
+                    currentSample = -level * tailOff;
+                }
                 
                 for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     outputBuffer.addSample (i, startSample, currentSample);
                 
                 currentAngle += angleDelta;
                 ++startSample;
+                
+                if (currentAngle > 2 * double_Pi)
+                    currentAngle = currentAngle - (2 * double_Pi);
                 
                 tailOff *= 0.99;
                 
@@ -69,13 +78,22 @@ void SquareWaveVoice::renderNextBlock (AudioSampleBuffer& outputBuffer, int star
         {
             while (--numSamples >= 0)
             {
-                const float currentSample = (float) (sin (currentAngle) * level);
+                float currentSample;
+                
+                if (currentAngle < double_Pi) {
+                    currentSample = level;
+                } else {
+                    currentSample = -level;
+                }
                 
                 for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     outputBuffer.addSample (i, startSample, currentSample);
                 
                 currentAngle += angleDelta;
                 ++startSample;
+                
+                if (currentAngle > 2 * double_Pi)
+                    currentAngle = currentAngle - (2 * double_Pi);
             }
         }
     }

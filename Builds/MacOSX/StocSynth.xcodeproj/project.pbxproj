@@ -29,6 +29,7 @@
 		4894CC768B40F7F4E69E4E68 /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1A55A16565E995AB2ADD0E /* DiscRecording.framework */; };
 		4AAC1AE91B334FB400FB3D45 /* SineWave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AAC1AE71B334FB400FB3D45 /* SineWave.cpp */; };
 		4AAC1AEC1B33C2DF00FB3D45 /* SquareWave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AAC1AEA1B33C2DF00FB3D45 /* SquareWave.cpp */; };
+		4AAC1AEF1B343D4200FB3D45 /* SawtoothWave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AAC1AED1B343D4200FB3D45 /* SawtoothWave.cpp */; };
 		4CD1F8E8B032C75032BE133F /* ComponentBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A90F868084A33839039F5A /* ComponentBase.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5172612796E6CEC0E4C92167 /* AUDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1C7B00E075DECBC089F36AC /* AUDispatch.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		51B31AD0048E196C742C794A /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBB9154C489B0758B5BE1E3 /* CAStreamBasicDescription.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
@@ -352,6 +353,8 @@
 		4AAC1AE81B334FB400FB3D45 /* SineWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SineWave.h; path = ../../Source/SineWave.h; sourceTree = "<group>"; };
 		4AAC1AEA1B33C2DF00FB3D45 /* SquareWave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SquareWave.cpp; path = ../../Source/SquareWave.cpp; sourceTree = "<group>"; };
 		4AAC1AEB1B33C2DF00FB3D45 /* SquareWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareWave.h; path = ../../Source/SquareWave.h; sourceTree = "<group>"; };
+		4AAC1AED1B343D4200FB3D45 /* SawtoothWave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SawtoothWave.cpp; path = ../../Source/SawtoothWave.cpp; sourceTree = "<group>"; };
+		4AAC1AEE1B343D4200FB3D45 /* SawtoothWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SawtoothWave.h; path = ../../Source/SawtoothWave.h; sourceTree = "<group>"; };
 		4AC997C806F4181198655DFC /* juce_RectanglePlacement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_RectanglePlacement.h; path = ../../../juce/modules/juce_graphics/placement/juce_RectanglePlacement.h; sourceTree = SOURCE_ROOT; };
 		4AEEC8F0EA85027B770146B5 /* juce_GZIPCompressorOutputStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_GZIPCompressorOutputStream.cpp; path = ../../../juce/modules/juce_core/zip/juce_GZIPCompressorOutputStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B45FD254CE5DDED3A6AF965 /* juce_Line.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Line.h; path = ../../../juce/modules/juce_graphics/geometry/juce_Line.h; sourceTree = SOURCE_ROOT; };
@@ -1683,6 +1686,8 @@
 				4AAC1AE81B334FB400FB3D45 /* SineWave.h */,
 				4AAC1AEA1B33C2DF00FB3D45 /* SquareWave.cpp */,
 				4AAC1AEB1B33C2DF00FB3D45 /* SquareWave.h */,
+				4AAC1AED1B343D4200FB3D45 /* SawtoothWave.cpp */,
+				4AAC1AEE1B343D4200FB3D45 /* SawtoothWave.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -3027,6 +3032,7 @@
 				CDC8338245E76A4FF11956F6 /* juce_graphics.mm in Sources */,
 				F9BCB86DF4986262DBBBF34E /* juce_gui_basics.mm in Sources */,
 				5752967ED4A34A8EE12E92ED /* juce_gui_extra.mm in Sources */,
+				4AAC1AEF1B343D4200FB3D45 /* SawtoothWave.cpp in Sources */,
 				D3E6EF5B5DA644DA3C16BEF7 /* juce_opengl.mm in Sources */,
 				702247EACDBBA2E70B619E0A /* juce_PluginUtilities.cpp in Sources */,
 				B81E171725A9585504034E8A /* juce_RTAS_DigiCode1.cpp in Sources */,

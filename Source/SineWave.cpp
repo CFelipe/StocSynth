@@ -74,7 +74,7 @@ void SineWaveVoice::renderNextBlock (AudioSampleBuffer& outputBuffer, int startS
                 for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     outputBuffer.addSample (i, startSample, currentSample);
                     
-                    currentAngle += angleDelta;
+                currentAngle += angleDelta;
                 ++startSample;
             }
         }
