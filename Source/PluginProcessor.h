@@ -2,6 +2,7 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Oscillator.h"
 
 class StocSynthAudioProcessor  : public AudioProcessor
 {
@@ -44,9 +45,16 @@ public:
 
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    void changeWaveform(Waveform waveform);
 
     Synthesiser synth;
-    MidiKeyboardState keyboardState;
+    
+    enum Parameters
+    {
+        WAVE_PARAM = 0,
+        totalNumParams
+    };
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StocSynthAudioProcessor)

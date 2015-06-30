@@ -1,20 +1,24 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "SineWave.h"
-#include "SquareWave.h"
-#include "SawtoothWave.h"
-
 
 StocSynthAudioProcessor::StocSynthAudioProcessor()
 {
-    for (int i = 4; --i >= 0;)
-        synth.addVoice (new SawtoothWaveVoice());
+    for (int i = 0; i < 4; i++) {
+        synth.addVoice(new OscillatorVoice());
+    }
     
-    synth.addSound (new SawtoothWaveSound());
+    synth.addSound (new OscillatorSound());
 }
 
 StocSynthAudioProcessor::~StocSynthAudioProcessor()
 {
+}
+
+void StocSynthAudioProcessor::changeWaveform(Waveform waveform) {
+    for(int i = 0; i < 4; i++) {
+        OscillatorVoice* voice = static_cast<OscillatorVoice*> (synth.getVoice(i));
+        voice->changeWaveform(waveform);
+    }
 }
 
 const String StocSynthAudioProcessor::getName() const
@@ -34,6 +38,26 @@ float StocSynthAudioProcessor::getParameter (int index)
 
 void StocSynthAudioProcessor::setParameter (int index, float newValue)
 {
+    switch(index) {
+        case WAVE_PARAM:
+            switch ((int) newValue) {
+                case 1:
+                    changeWaveform(Waveform::SINE);
+                    break;
+                case 2:
+                    changeWaveform(Waveform::SQUARE);
+                    break;
+                case 3:
+                    changeWaveform(Waveform::SAW);
+                    break;
+                case 4:
+                    changeWaveform(Waveform::TRIANGLE);
+                    break;
+                default:
+                    break;
+            }
+            break;
+    }
 }
 
 const String StocSynthAudioProcessor::getParameterName (int index)
@@ -96,8 +120,7 @@ double StocSynthAudioProcessor::getTailLengthSeconds() const
 
 int StocSynthAudioProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    return 1;
 }
 
 int StocSynthAudioProcessor::getCurrentProgram()
@@ -118,7 +141,6 @@ void StocSynthAudioProcessor::changeProgramName (int index, const String& newNam
 {
 }
 
-//==============================================================================
 void StocSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     synth.setCurrentPlaybackSampleRate (sampleRate);
@@ -126,8 +148,6 @@ void StocSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
 void StocSynthAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
 }
 
 void StocSynthAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
@@ -140,10 +160,9 @@ void StocSynthAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffe
     synth.renderNextBlock (buffer, midiMessages, 0, numSamples);
 }
 
-//==============================================================================
 bool StocSynthAudioProcessor::hasEditor() const
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return true;
 }
 
 AudioProcessorEditor* StocSynthAudioProcessor::createEditor()
@@ -151,22 +170,14 @@ AudioProcessorEditor* StocSynthAudioProcessor::createEditor()
     return new StocSynthAudioProcessorEditor (*this);
 }
 
-//==============================================================================
 void StocSynthAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
 }
 
 void StocSynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new StocSynthAudioProcessor();

@@ -4,7 +4,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
-class StocSynthAudioProcessorEditor  : public AudioProcessorEditor
+class StocSynthAudioProcessorEditor  : public AudioProcessorEditor,
+                                       public ComboBoxListener
 {
 public:
     StocSynthAudioProcessorEditor (StocSynthAudioProcessor&);
@@ -12,11 +13,12 @@ public:
 
     void paint (Graphics&) override;
     void resized() override;
+    void comboBoxChanged(ComboBox *comboBox) override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     StocSynthAudioProcessor& processor;
+    ComboBox wavebox;
+    String wave;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StocSynthAudioProcessorEditor)
 };
