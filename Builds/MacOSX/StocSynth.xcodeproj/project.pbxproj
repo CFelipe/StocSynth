@@ -27,6 +27,7 @@
 		413CAB1831265C3171ECB079 /* juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = 07A45B99817B9F8F4EDC1217 /* juce_data_structures.mm */; };
 		47BABE4959E46FA889D6DC02 /* AUBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57E730B0288E4AD3BD0A353A /* AUBase.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		4894CC768B40F7F4E69E4E68 /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1A55A16565E995AB2ADD0E /* DiscRecording.framework */; };
+		4A49248A1B43547D005FB185 /* Envelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A4924881B43547C005FB185 /* Envelope.cpp */; };
 		4AB394491B3EC3AF00977C4D /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AB394471B3EC3AF00977C4D /* Oscillator.cpp */; };
 		4CD1F8E8B032C75032BE133F /* ComponentBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A90F868084A33839039F5A /* ComponentBase.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5172612796E6CEC0E4C92167 /* AUDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1C7B00E075DECBC089F36AC /* AUDispatch.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
@@ -345,6 +346,8 @@
 		4786D48203C8889D3027427F /* juce_GlowEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_GlowEffect.h; path = ../../../juce/modules/juce_graphics/effects/juce_GlowEffect.h; sourceTree = SOURCE_ROOT; };
 		49BC3C555C722EC4C24C20D9 /* juce_DocumentWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_DocumentWindow.cpp; path = ../../../juce/modules/juce_gui_basics/windows/juce_DocumentWindow.cpp; sourceTree = SOURCE_ROOT; };
 		4A1B76DEDBF39D536B543A8D /* juce_ToggleButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_ToggleButton.h; path = ../../../juce/modules/juce_gui_basics/buttons/juce_ToggleButton.h; sourceTree = SOURCE_ROOT; };
+		4A4924881B43547C005FB185 /* Envelope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Envelope.cpp; path = ../../Source/Envelope.cpp; sourceTree = "<group>"; };
+		4A4924891B43547D005FB185 /* Envelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Envelope.h; path = ../../Source/Envelope.h; sourceTree = "<group>"; };
 		4A4AA2360644AA03452B1D58 /* juce_ImageFileFormat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_ImageFileFormat.h; path = ../../../juce/modules/juce_graphics/images/juce_ImageFileFormat.h; sourceTree = SOURCE_ROOT; };
 		4A975EDCF6C56DD110AAB170 /* juce_OpenGLTexture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OpenGLTexture.cpp; path = ../../../juce/modules/juce_opengl/opengl/juce_OpenGLTexture.cpp; sourceTree = SOURCE_ROOT; };
 		4AAC1AE81B334FB400FB3D45 /* SineWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SineWave.h; path = ../../Source/SineWave.h; sourceTree = "<group>"; };
@@ -1688,6 +1691,8 @@
 				4AAC1AEE1B343D4200FB3D45 /* SawtoothWave.h */,
 				4AB394471B3EC3AF00977C4D /* Oscillator.cpp */,
 				4AB394481B3EC3AF00977C4D /* Oscillator.h */,
+				4A4924881B43547C005FB185 /* Envelope.cpp */,
+				4A4924891B43547D005FB185 /* Envelope.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -3015,6 +3020,7 @@
 				13284767A19C41EFF743228C /* CAMutex.cpp in Sources */,
 				015E14E14CFC8F7D6E2CF826 /* CarbonEventHandler.cpp in Sources */,
 				51B31AD0048E196C742C794A /* CAStreamBasicDescription.cpp in Sources */,
+				4A49248A1B43547D005FB185 /* Envelope.cpp in Sources */,
 				D6670716389825D6DAC9BA4C /* CAVectorUnit.cpp in Sources */,
 				4CD1F8E8B032C75032BE133F /* ComponentBase.cpp in Sources */,
 				08B8BCEFCA610F793A9147F1 /* MusicDeviceBase.cpp in Sources */,

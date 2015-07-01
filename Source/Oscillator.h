@@ -2,6 +2,7 @@
 #define __StocSynth__Oscillator__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "Envelope.h"
 #include <random>
 
 enum Waveform {SINE = 1, SQUARE, SAW, TRIANGLE};
@@ -43,6 +44,7 @@ public:
 private:
     double phase, phaseDelta, level, tailOff, prevOut;
     Waveform waveform;
+    Envelope envelope;
     
     std::default_random_engine generator;
     std::normal_distribution<double> distribution;

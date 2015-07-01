@@ -63,20 +63,16 @@ void OscillatorVoice::startNote(int midiNoteNumber, float velocity,
                                SynthesiserSound* /*sound*/,
                                int /*currentPitchWheelPosition*/) {
     level = velocity * 0.015;
-    tailOff = 0.0;
 
-    double freq = MidiMessage::getMidiNoteInHertz(midiNoteNumber) + distribution(generator);
+    double freq = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
     phaseDelta = freq * 2 * double_Pi / getSampleRate();
     phase = 0.0;
+    
+    envelope.enterStage(Envelope::ENVELOPE_STAGE_ATTACK);
 }
 
 void OscillatorVoice::stopNote(float /*velocity*/, bool allowTailOff) {
-    if(allowTailOff) {
-        if(tailOff == 0.0) tailOff = 1.0;
-    } else {
-        clearCurrentNote();
-        phaseDelta = 0.0;
-    }
+    envelope.enterStage(Envelope::ENVELOPE_STAGE_RELEASE);
 }
 
 void OscillatorVoice::changeWaveform(Waveform waveform) {
@@ -85,48 +81,46 @@ void OscillatorVoice::changeWaveform(Waveform waveform) {
 
 void OscillatorVoice::renderNextBlock(AudioSampleBuffer& outputBuffer, int startSample, int numSamples)
 {
-    if(phaseDelta != 0.0) {
-        while(--numSamples >= 0) {
-            const float realLevel = ((tailOff > 0) ? (level * tailOff) : level);
+    while(--numSamples >= 0) {
+        const float realLevel = ((tailOff > 0) ? (level * tailOff) : level);
 
-            double value = 0.0;
+        double value = 0.0;
 
-            double t = phase / (2 * double_Pi);
+        double t = phase / (2 * double_Pi);
 
-            value = naiveWaveform(waveform);
+        value = naiveWaveform(waveform);
 
-            if(waveform == Waveform::SAW) {
-                value -= polyBlep(t);
-            } else if(waveform == Waveform::SQUARE) {
-                value += polyBlep(t);
-                value -= polyBlep(fmod(t + 0.5, 1.0));
-            } else if(waveform == Waveform::TRIANGLE) {
-                value = phaseDelta * value + (1 - phaseDelta) * prevOut;
-                prevOut = value;
-            }
+        if(waveform == Waveform::SAW) {
+            value -= polyBlep(t);
+        } else if(waveform == Waveform::SQUARE) {
+            value += polyBlep(t);
+            value -= polyBlep(fmod(t + 0.5, 1.0));
+        } else if(waveform == Waveform::TRIANGLE) {
+            value = phaseDelta * value + (1 - phaseDelta) * prevOut;
+            prevOut = value;
+        }
 
-            const float currentSample = value * realLevel;
+        const float currentSample = value * realLevel * envelope.nextSample();
 
-            for(int i = outputBuffer.getNumChannels(); --i >= 0;)
-                outputBuffer.addSample(i, startSample, currentSample);
+        for(int i = outputBuffer.getNumChannels(); --i >= 0;)
+            outputBuffer.addSample(i, startSample, currentSample);
 
-            phase += phaseDelta;
+        phase += phaseDelta;
 
-            while(phase >= 2 * double_Pi) {
-                phase -= 2 * double_Pi;
-            }
+        while(phase >= 2 * double_Pi) {
+            phase -= 2 * double_Pi;
+        }
 
-            ++startSample;
+        ++startSample;
 
-            if(tailOff > 0) {
-                tailOff *= 0.99;
+        if(tailOff > 0) {
+            tailOff *= 0.99;
 
-                if(tailOff <= 0.005) {
-                    clearCurrentNote();
+            if(tailOff <= 0.005) {
+                clearCurrentNote();
 
-                    phaseDelta = 0.0;
-                    break;
-                }
+                phaseDelta = 0.0;
+                break;
             }
         }
     }
