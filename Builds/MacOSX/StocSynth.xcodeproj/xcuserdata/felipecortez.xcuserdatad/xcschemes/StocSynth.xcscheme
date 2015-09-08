@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5D0EE5FEB612301ADF2FC01E"
-               BuildableName = "NewProject.component"
+               BuildableName = "StocSynth.component"
                BlueprintName = "StocSynth"
                ReferencedContainer = "container:StocSynth.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5D0EE5FEB612301ADF2FC01E"
-            BuildableName = "NewProject.component"
+            BuildableName = "StocSynth.component"
             BlueprintName = "StocSynth"
             ReferencedContainer = "container:StocSynth.xcodeproj">
          </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5D0EE5FEB612301ADF2FC01E"
-            BuildableName = "NewProject.component"
+            BuildableName = "StocSynth.component"
             BlueprintName = "StocSynth"
             ReferencedContainer = "container:StocSynth.xcodeproj">
          </BuildableReference>

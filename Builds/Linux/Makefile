@@ -24,7 +24,7 @@ ifeq ($(CONFIG),Debug)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -shared -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ~/Dev/vst3 -I ../../JuceLibraryCode -I ../../../juce/modules
-  TARGET := NewProject.so
+  TARGET := StocSynth.so
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
 endif
@@ -45,12 +45,13 @@ ifeq ($(CONFIG),Release)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -shared -fvisibility=hidden -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ~/Dev/vst3 -I ../../JuceLibraryCode -I ../../../juce/modules
-  TARGET := NewProject.so
+  TARGET := StocSynth.so
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/SynthVoice_279f55df.o \
   $(OBJDIR)/Envelope_2c60e259.o \
   $(OBJDIR)/Filter_cccb6f01.o \
   $(OBJDIR)/Oscillator_8a6cfe29.o \
@@ -90,6 +91,11 @@ clean:
 strip:
 	@echo Stripping StocSynth
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
+
+$(OBJDIR)/SynthVoice_279f55df.o: ../../Source/SynthVoice.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SynthVoice.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Envelope_2c60e259.o: ../../Source/Envelope.cpp
 	-@mkdir -p $(OBJDIR)
