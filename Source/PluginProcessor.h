@@ -2,7 +2,7 @@
 #define PLUGINPROCESSOR_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "Oscillator.h"
+#include "SynthVoice.h"
 
 class StocSynthAudioProcessor  : public AudioProcessor
 {
@@ -47,12 +47,33 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     void changeWaveform(Waveform waveform);
+    void changeCutoff(float cutoff);
+    void changeRes(float res);
+    void changeAmpA(float a);
+    void changeAmpD(float d);
+    void changeAmpS(float s);
+    void changeAmpR(float r);
+    void changeGain(float g);
 
     Synthesiser synth;
+    float cutoff;
+    float res;
+    float ampA;
+    float ampD;
+    float ampS;
+    float ampR;
+    float gain;
     
     enum Parameters
     {
         WAVE_PARAM = 0,
+        CUTOFF_PARAM,
+        RES_PARAM,
+        AMP_A_PARAM,
+        AMP_D_PARAM,
+        AMP_S_PARAM,
+        AMP_R_PARAM,
+        GAIN_PARAM,
         totalNumParams
     };
     

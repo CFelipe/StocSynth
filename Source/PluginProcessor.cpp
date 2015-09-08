@@ -1,24 +1,94 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#define VOICES 8
+
 StocSynthAudioProcessor::StocSynthAudioProcessor()
 {
-    for (int i = 0; i < 4; i++) {
-        synth.addVoice(new OscillatorVoice());
+    gain = 0.7;
+    ampA = 0.01;
+    ampD = 0.5;
+    ampS = 0.7;
+    ampR = 3.0;
+
+    for (int i = 0; i < VOICES; i++) {
+        synth.addVoice(new SynthVoice());
     }
     
-    synth.addSound (new OscillatorSound());
+    synth.addSound (new SynthSound());
 }
 
 StocSynthAudioProcessor::~StocSynthAudioProcessor()
 {
 }
 
+// Code from before this becoming an additive synthesiser
 void StocSynthAudioProcessor::changeWaveform(Waveform waveform) {
-    for(int i = 0; i < 4; i++) {
-        OscillatorVoice* voice = static_cast<OscillatorVoice*> (synth.getVoice(i));
+    /*
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
         voice->changeWaveform(waveform);
     }
+     */
+}
+
+
+void StocSynthAudioProcessor::changeCutoff(float cutoff) {
+    this->cutoff = cutoff;
+    
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
+        voice->changeCutoff(cutoff);
+    }
+}
+
+void StocSynthAudioProcessor::changeRes(float res) {
+    this->res = res;
+    
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
+        voice->changeRes(res);
+    }
+}
+
+void StocSynthAudioProcessor::changeAmpA(float a) {
+    this->ampA = a;
+    
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
+        voice->changeAmpA(a);
+    }
+}
+
+void StocSynthAudioProcessor::changeAmpD(float d) {
+    this->ampD = d;
+    
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
+        voice->changeAmpD(d);
+    }
+}
+
+void StocSynthAudioProcessor::changeAmpS(float s) {
+    this->ampS = s;
+    
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
+        voice->changeAmpS(s);
+    }
+}
+
+void StocSynthAudioProcessor::changeAmpR(float r) {
+    this-> ampR = r;
+    
+    for(int i = 0; i < VOICES; i++) {
+        SynthVoice* voice = static_cast<SynthVoice*> (synth.getVoice(i));
+        voice->changeAmpR(r);
+    }
+}
+
+void StocSynthAudioProcessor::changeGain(float gain) {
+    this->gain = gain;
 }
 
 const String StocSynthAudioProcessor::getName() const
@@ -28,34 +98,45 @@ const String StocSynthAudioProcessor::getName() const
 
 int StocSynthAudioProcessor::getNumParameters()
 {
-    return 0;
+    return totalNumParams;
 }
 
 float StocSynthAudioProcessor::getParameter (int index)
 {
-    return 0.0f;
+    switch (index)
+    {
+        case WAVE_PARAM:    return 0.0f;
+        case CUTOFF_PARAM:  return 0.0f;
+        default:            return 0.0f;
+    }
 }
 
 void StocSynthAudioProcessor::setParameter (int index, float newValue)
 {
     switch(index) {
         case WAVE_PARAM:
-            switch ((int) newValue) {
-                case 1:
-                    changeWaveform(Waveform::SINE);
-                    break;
-                case 2:
-                    changeWaveform(Waveform::SQUARE);
-                    break;
-                case 3:
-                    changeWaveform(Waveform::SAW);
-                    break;
-                case 4:
-                    changeWaveform(Waveform::TRIANGLE);
-                    break;
-                default:
-                    break;
-            }
+            changeWaveform(static_cast<Waveform>((int) newValue));
+            break;
+        case CUTOFF_PARAM:
+            changeCutoff(newValue);
+            break;
+        case RES_PARAM:
+            changeRes(newValue);
+            break;
+        case AMP_A_PARAM:
+            changeAmpA(newValue);
+            break;
+        case AMP_D_PARAM:
+            changeAmpD(newValue);
+            break;
+        case AMP_S_PARAM:
+            changeAmpS(newValue);
+            break;
+        case AMP_R_PARAM:
+            changeAmpR(newValue);
+            break;
+        case GAIN_PARAM:
+            changeGain(newValue);
             break;
     }
 }
@@ -172,10 +253,32 @@ AudioProcessorEditor* StocSynthAudioProcessor::createEditor()
 
 void StocSynthAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
+    // Create an outer XML element..
+    XmlElement xml ("MYPLUGINSETTINGS");
+    
+    xml.setAttribute("cutoff", cutoff);
+    xml.setAttribute("res", res);
+    xml.setAttribute("ampA", ampA);
+    xml.setAttribute("ampD", ampD);
+    xml.setAttribute("ampS", ampS);
+    xml.setAttribute("ampR", ampR);
+    xml.setAttribute ("gain", gain);
+    
+    copyXmlToBinary (xml, destData);
 }
 
 void StocSynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    
+    if (xmlState != nullptr)
+    {
+        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        {
+            cutoff = (float) xmlState->getDoubleAttribute("cutoff", cutoff);
+            gain  = (float) xmlState->getDoubleAttribute ("gain", gain);
+        }
+    }
 }
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()

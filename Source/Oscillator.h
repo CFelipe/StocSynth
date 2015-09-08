@@ -2,50 +2,26 @@
 #define __StocSynth__Oscillator__
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "Envelope.h"
 #include <random>
 
 enum Waveform {SINE = 1, SQUARE, SAW, TRIANGLE};
 
-class OscillatorSound : public SynthesiserSound
+class Oscillator
 {
 public:
-    OscillatorSound() {}
+    Oscillator();
+    Oscillator(Waveform waveform);
     
-    bool appliesToNote (int /*midiNoteNumber*/) override  { return true; }
-    bool appliesToChannel (int /*midiChannel*/) override  { return true; }
-};
-
-class OscillatorVoice  : public SynthesiserVoice
-{
-public:
-    OscillatorVoice();
-    OscillatorVoice(Waveform waveform);
-    
-    bool canPlaySound(SynthesiserSound* sound) override;
-    void startNote (int midiNoteNumber, float velocity,
-                    SynthesiserSound* /*sound*/,
-                    int /*currentPitchWheelPosition*/) override;
-    void stopNote (float /*velocity*/, bool allowTailOff) override;
-    void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override;
-    
-    void pitchWheelMoved (int /*newValue*/) override
-    {
-    }
-    
-    void controllerMoved (int /*controllerNumber*/, int /*newValue*/) override
-    {
-    }
+    float getSample();
     
     double polyBlep(double t);
     double naiveWaveform(Waveform waveform);
     void changeWaveform(Waveform waveform);
+    void setFreq(double freq, double sampleRate);
     
 private:
-    double phase, phaseDelta, level, tailOff, prevOut;
+    double phase, phaseDelta, prevOut, level, tailOff, randomPitch, sampleRate;
     Waveform waveform;
-    Envelope envelope;
-    
     std::default_random_engine generator;
     std::normal_distribution<double> distribution;
 };

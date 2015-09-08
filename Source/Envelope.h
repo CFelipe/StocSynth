@@ -1,6 +1,7 @@
 #ifndef __StocSynth__Envelope__
 #define __StocSynth__Envelope__
 
+// Mostly taken from http://www.martin-finke.de/blog/articles/audio-plugins-011-envelopes/
 class Envelope {
 public:
     enum EnvelopeStage {
@@ -15,6 +16,7 @@ public:
     double nextSample();
     void setSampleRate(double newSampleRate);
     inline EnvelopeStage getCurrentStage() const { return currentStage; };
+    void setStageValue(EnvelopeStage stage, double value);
     const double minimumLevel;
     
     Envelope() :
@@ -28,8 +30,8 @@ public:
         stageValue[ENVELOPE_STAGE_OFF] = 0.0;
         stageValue[ENVELOPE_STAGE_ATTACK] = 0.01;
         stageValue[ENVELOPE_STAGE_DECAY] = 0.5;
-        stageValue[ENVELOPE_STAGE_SUSTAIN] = 0.1;
-        stageValue[ENVELOPE_STAGE_RELEASE] = 1.0;
+        stageValue[ENVELOPE_STAGE_SUSTAIN] = 0.7;
+        stageValue[ENVELOPE_STAGE_RELEASE] = 3.0;
     };
 private:
     EnvelopeStage currentStage;

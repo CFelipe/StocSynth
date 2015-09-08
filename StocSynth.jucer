@@ -13,6 +13,26 @@
               companyEmail="felipecortezfi@gmail.com">
   <MAINGROUP id="WlrCXt" name="StocSynth">
     <GROUP id="{55340F18-CF8F-01C5-8BB3-E1A870F61AC2}" name="Source">
+      <GROUP id="{A669A682-8184-2970-64D7-5EC952D292EB}" name="Resources">
+        <FILE id="DMknoG" name="a.png" compile="0" resource="1" file="Resources/a.png"/>
+        <FILE id="ONxoH5" name="amp_title.png" compile="0" resource="1" file="Resources/amp_title.png"/>
+        <FILE id="GckMHL" name="cutoff.png" compile="0" resource="1" file="Resources/cutoff.png"/>
+        <FILE id="G5oPqK" name="d.png" compile="0" resource="1" file="Resources/d.png"/>
+        <FILE id="sP2UXv" name="filter_title.png" compile="0" resource="1"
+              file="Resources/filter_title.png"/>
+        <FILE id="cNjcMA" name="gain.png" compile="0" resource="1" file="Resources/gain.png"/>
+        <FILE id="rzjJaW" name="logo.png" compile="0" resource="1" file="Resources/logo.png"/>
+        <FILE id="j26bdn" name="osc_title.png" compile="0" resource="1" file="Resources/osc_title.png"/>
+        <FILE id="UVy2wK" name="r.png" compile="0" resource="1" file="Resources/r.png"/>
+        <FILE id="KirJaS" name="res.png" compile="0" resource="1" file="Resources/res.png"/>
+        <FILE id="s7RABZ" name="s.png" compile="0" resource="1" file="Resources/s.png"/>
+      </GROUP>
+      <FILE id="GPlCDX" name="Envelope.cpp" compile="1" resource="0" file="Source/Envelope.cpp"/>
+      <FILE id="e0MOnk" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
+      <FILE id="BoLGOo" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
+      <FILE id="C12Pax" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+      <FILE id="ZTUx3b" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
+      <FILE id="d2FTq9" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
       <FILE id="FJWzZq" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="VOwwAq" name="PluginProcessor.h" compile="0" resource="0"
