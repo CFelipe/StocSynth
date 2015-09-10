@@ -1,8 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-#define DIM_W 588
-#define DIM_H 277
+#define DIM_W 630
+#define DIM_H 290
 
 struct CustomLookAndFeel: public LookAndFeel_V3
 {
@@ -102,7 +102,7 @@ struct CustomLookAndFeel: public LookAndFeel_V3
                                 float sliderPos, float minSliderPos, float maxSliderPos,
                                 const Slider::SliderStyle style, Slider& slider) override
     {
-        //const float sliderRadius = (float) (getSliderThumbRadius (slider) - 2);
+
         const float sliderRadius = 9;
         
         bool isDownOrDragging = slider.isEnabled() && (slider.isMouseOverOrDragging() || slider.isMouseButtonDown());
@@ -139,9 +139,7 @@ struct CustomLookAndFeel: public LookAndFeel_V3
     void drawLinearSlider (Graphics& g, int x, int y, int width, int height,
                            float sliderPos, float minSliderPos, float maxSliderPos,
                            const Slider::SliderStyle style, Slider& slider) override
-    {
-        g.fillAll (slider.findColour (Slider::backgroundColourId));
-        
+    {        
         if (style == Slider::LinearBar || style == Slider::LinearBarVertical)
         {
             const float fx = (float) x, fy = (float) y, fw = (float) width, fh = (float) height;
@@ -177,149 +175,148 @@ struct CustomLookAndFeel: public LookAndFeel_V3
                                      float /*maxSliderPos*/,
                                      const Slider::SliderStyle /*style*/, Slider& slider) override
     {
-        //const float sliderRadius = getSliderThumbRadius (slider) - 5.0f;
-        const float sliderRadius = 5;
         Path on, off;
         
         if (slider.isHorizontal())
         {
-            const float iy = x + width * 0.5f - sliderRadius * 0.5f;
-            Rectangle<float> r (x - sliderRadius * 0.5f, iy, width + sliderRadius, sliderRadius);
-            const float onW = r.getWidth() * ((float) slider.valueToProportionOfLength (slider.getValue()));
-            
-            on.addRectangle (r.removeFromLeft (onW));
-            off.addRectangle (r);
+            // Not happening yet
         }
         else
         {
-            const float ix = x + width * 0.5f - sliderRadius * 0.5f;
-            Rectangle<float> r (ix, y - sliderRadius * 0.5f, sliderRadius, height + sliderRadius);
-            const float onH = r.getHeight() * ((float) slider.valueToProportionOfLength (slider.getValue()));
-            
-            on.addRectangle (r.removeFromBottom (onH));
-            off.addRectangle (r);
+            DrawableImage sliderOverlayImage;
+            Image sliderOverlayIcon = ImageCache::getFromMemory(BinaryData::slider_overlay_png,
+                                                                BinaryData::slider_overlay_pngSize);
+            sliderOverlayImage.setImage(sliderOverlayIcon);
+            sliderOverlayImage.drawAt(g, x, y, 1.0f);
         }
         
         g.setColour(Colour(37, 37, 37));
-        g.fillPath (on);
-        g.fillPath (off);
+        g.fillPath(on);
+        g.fillPath(off);
     }
     
     void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                            float rotaryStartAngle, float rotaryEndAngle, Slider& slider) override
     {
-        const float radius = jmin (width / 2, height / 2) - 2.0f;
-        const float centreX = x + width * 0.5f;
-        const float centreY = y + height * 0.5f;
+        // Very messy but does the job :)
+        const float radius = 9.0f;
+        const float centreX = x + 33 * 0.5f;
+        const float centreY = y + 33 * 0.5f;
         const float rx = centreX - radius;
         const float ry = centreY - radius;
         const float rw = radius * 2.0f;
         const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-        const bool isMouseOver = slider.isMouseOverOrDragging() && slider.isEnabled();
-        
-        if (slider.isEnabled())
-            g.setColour (slider.findColour (Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
-        else
-            g.setColour (Colour (0x80808080));
         
         {
-            Path filledArc;
-            filledArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, angle, 0.0);
-            g.fillPath (filledArc);
+            DrawableImage knobOverlayImage;
+            Image knobOverlayIcon = ImageCache::getFromMemory(BinaryData::knob_overlay_png,
+                                                              BinaryData::knob_overlay_pngSize);
+            knobOverlayImage.setImage(knobOverlayIcon);
+            knobOverlayImage.drawAt(g, x, y, 1.0f);
+            
+            Path knob;
+            g.setColour(Colour(251, 222, 146));
+            knob.addEllipse(rx, ry, rw, rw);
+            g.fillPath (knob);
+            
+            Path indicator;
+            g.setColour(Colour(38, 38, 38));
+            indicator.addRectangle(centreX - 1, ry + 1, 2, 7);
+            g.saveState();
+            g.addTransform(AffineTransform::identity.translated(-centreX, -centreY).rotated(angle).translated(centreX, centreY));
+            g.fillPath(indicator);
+            g.restoreState();
         }
         
         {
-            const float lineThickness = jmin (15.0f, jmin (width, height) * 0.45f) * 0.1f;
-            Path outlineArc;
-            outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, 0.0);
-            g.strokePath (outlineArc, PathStrokeType (lineThickness));
+            Path outline;
+            outline.addEllipse(rx, ry, rw, rw);
+            g.strokePath(outline, PathStrokeType (2));
         }
     }
 };
 
+void StocSynthAudioProcessorEditor::addKnob(Slider *knob, int x, int y) {
+    knob->setRange(0.0, 1.0, 0.001);
+    knob->setSliderStyle(Slider::RotaryVerticalDrag);
+    knob->setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
+    knob->setBounds(x, y, 32, 32);
+    knob->setDoubleClickReturnValue (true, 1.0);
+    knob->setMouseDragSensitivity(127);
+    knob->addListener(this);
+    addAndMakeVisible(knob);
+}
+
+void StocSynthAudioProcessorEditor::addSlider(Slider *slider, int x, int y, int rangeMin, int rangeMax, int doubleClickValue) {
+    slider->setRange (0.0, 0.99, 0.001);
+    slider->setSliderStyle (Slider::LinearVertical);
+    slider->setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
+    slider->setBounds (x, y, 33, 145);
+    slider->setDoubleClickReturnValue (true, 0.90);
+    slider->addListener(this);
+    addAndMakeVisible(slider);
+}
+
 StocSynthAudioProcessorEditor::StocSynthAudioProcessorEditor (StocSynthAudioProcessor& p)
     : AudioProcessorEditor(&p),
       processor(p),
-      wavebox("Wave"),
       cutoffSlider(),
       resSlider(),
       aSlider(),
       dSlider(),
       sSlider(),
-      rSlider()
+      rSlider(),
+      toneKnob(),
+      a135Knob(),
+      a246Knob(),
+      a789Knob(),
+      subKnob(),
+      var135Knob(),
+      var246Knob(),
+      var789Knob(),
+      pitch135Knob(),
+      pitch246Knob(),
+      pitch789Knob()
 {
     setSize (DIM_W, DIM_H);
     
     LookAndFeel *laf = new CustomLookAndFeel();
     setLookAndFeel(laf);
     
-    wavebox.addItem("SIN", 1);
-    wavebox.addItem("SQR", 2);
-    wavebox.addItem("SAW", 3);
-    wavebox.addItem("TRI", 4);
-    wavebox.setBounds (108, 123, 54, 21);
-    wavebox.setSelectedId (1);
-    wavebox.addListener(this);
-    addAndMakeVisible(wavebox);
+    const float sliderY = 101;
     
-    cutoffSlider.setRange (0.0, 0.99, 0.001);
-    cutoffSlider.setSliderStyle (Slider::LinearVertical);
-    cutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    cutoffSlider.setBounds (212, 102, 30, 100);
-    cutoffSlider.setDoubleClickReturnValue (true, 0.90);
-    cutoffSlider.addListener(this);
-    addAndMakeVisible(cutoffSlider);
+    addSlider(&cutoffSlider, 210, sliderY, 0.0f, 0.99f, 0.90f);
+    addSlider(&resSlider,    268, sliderY, 0.0f, 1.0f, 0.1f);
+    addSlider(&aSlider,      340, sliderY, 0.0f, 1.0f, 0.5f);
+    addSlider(&dSlider,      397, sliderY, 0.0f, 1.0f, 0.5f);
+    addSlider(&sSlider,      454, sliderY, 0.0f, 1.0f, 0.5f);
+    addSlider(&rSlider,      511, sliderY, 0.0f, 1.0f, 0.5f);
+    addSlider(&gainSlider,   568, sliderY, 0.0f, 1.0f, 0.7f);
     
-    resSlider.setRange (0.0, 1.0, 0.001);
-    resSlider.setSliderStyle (Slider::LinearVertical);
-    resSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    resSlider.setBounds (266, 102, 30, 100);
-    resSlider.setDoubleClickReturnValue (true, 0.1);
-    resSlider.addListener(this);
-    addAndMakeVisible(resSlider);
+    const float colPadY = 58;
+    const float col1Y = 100;
+    const float col2Y = col1Y + colPadY;
+    const float col3Y = col2Y + colPadY;
     
-    aSlider.setRange (0.0, 1.0, 0.001);
-    aSlider.setSliderStyle (Slider::LinearVertical);
-    aSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    aSlider.setBounds (337, 102, 30, 100);
-    aSlider.setDoubleClickReturnValue (true, 0.5);
-    aSlider.addListener(this);
-    addAndMakeVisible(aSlider);
+    addKnob(&toneKnob, 22,  col1Y);
+    addKnob(&a135Knob, 63,  col1Y);
+    addKnob(&a246Knob, 104, col1Y);
+    addKnob(&a789Knob, 145, col1Y);
     
-    dSlider.setRange (0.0, 1.0, 0.001);
-    dSlider.setSliderStyle (Slider::LinearVertical);
-    dSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    dSlider.setBounds (383, 102, 30, 100);
-    dSlider.setDoubleClickReturnValue (true, 0.5);
-    dSlider.addListener(this);
-    addAndMakeVisible(dSlider);
+    addKnob(&subKnob,    22,  col2Y);
+    addKnob(&var135Knob, 63,  col2Y);
+    addKnob(&var246Knob, 104, col2Y);
+    addKnob(&var789Knob, 145, col2Y);
     
-    sSlider.setRange (0.0, 1.0, 0.001);
-    sSlider.setSliderStyle (Slider::LinearVertical);
-    sSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    sSlider.setBounds (430, 102, 30, 100);
-    sSlider.setDoubleClickReturnValue (true, 0.5);
-    sSlider.addListener(this);
-    addAndMakeVisible(sSlider);
-    
-    rSlider.setRange (0.0, 1.0, 0.001);
-    rSlider.setSliderStyle (Slider::LinearVertical);
-    rSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    rSlider.setBounds (476, 102, 30, 100);
-    rSlider.setDoubleClickReturnValue (true, 0.5);
-    rSlider.addListener(this);
-    addAndMakeVisible(rSlider);
-    
-    gainSlider.setRange (0.0, 1.0, 0.001);
-    gainSlider.setSliderStyle (Slider::LinearVertical);
-    gainSlider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
-    gainSlider.setBounds (520, 102, 30, 100);
-    gainSlider.setDoubleClickReturnValue (true, 0.7);
-    gainSlider.addListener(this);
-    addAndMakeVisible(gainSlider);
-    
+    addKnob(&pitch135Knob, 63,  col3Y);
+    addKnob(&pitch246Knob, 104, col3Y);
+    addKnob(&pitch789Knob, 145, col3Y);
+
     Image logoIcon = ImageCache::getFromMemory(BinaryData::logo_png,
                                                BinaryData::logo_pngSize);
+    
+    Image panelOverlaysIcon = ImageCache::getFromMemory(BinaryData::panel_overlays_png,
+                                                        BinaryData::panel_overlays_pngSize);
     
     Image oscIcon = ImageCache::getFromMemory(BinaryData::osc_title_png,
                                               BinaryData::osc_title_pngSize);
@@ -350,8 +347,15 @@ StocSynthAudioProcessorEditor::StocSynthAudioProcessorEditor (StocSynthAudioProc
     
     Image gainIcon = ImageCache::getFromMemory(BinaryData::gain_png,
                                                BinaryData::gain_pngSize);
+    
+    Image knobOverlayIcon = ImageCache::getFromMemory(BinaryData::knob_overlay_png,
+                                                      BinaryData::knob_overlay_pngSize);
+    
+    Image sliderOverlayIcon = ImageCache::getFromMemory(BinaryData::slider_overlay_png,
+                                                        BinaryData::slider_overlay_pngSize);
 
     logoImage.setImage(logoIcon);
+    panelOverlaysImage.setImage(panelOverlaysIcon);
     oscImage.setImage(oscIcon);
     filterImage.setImage(filterIcon);
     ampImage.setImage(ampIcon);
@@ -381,26 +385,32 @@ void StocSynthAudioProcessorEditor::paint (Graphics& g)
     outline.addRectangle(5, 5, DIM_W - 10, DIM_H - 10);
     g.strokePath(outline, PathStrokeType(2));
     
-    outline.addLineSegment(Line<float>(21, 60, 178, 60), 0);
-    g.strokePath(outline, PathStrokeType(2));
-
+    /*
     outline.addLineSegment(Line<float>(205, 60, 306, 60), 0);
     g.strokePath(outline, PathStrokeType(2));
     
     outline.addLineSegment(Line<float>(328, 60, 565, 60), 0);
     g.strokePath(outline, PathStrokeType(2));
+     */
     
-    logoImage.drawAt(g, 15, 15, 1.0f);
+    logoImage.drawAt(g, 25, 25, 1.0f);
+    
+    panelOverlaysImage.drawAt(g, 21, 60, 1.0f);
+    
+    /*
     oscImage.drawAt(g, 31, 69, 1.0f);
     filterImage.drawAt(g, 218, 69, 1.0f);
     ampImage.drawAt(g, 338, 69, 1.0f);
-    cutoffImage.drawAt(g, 212, 220, 1.0f);
-    resImage.drawAt(g, 268, 220, 1.0f);
-    aImage.drawAt(g, 350, 220, 1.0f);
-    dImage.drawAt(g, 395, 220, 1.0f);
-    sImage.drawAt(g, 442, 220, 1.0f);
-    rImage.drawAt(g, 489, 220, 1.0f);
-    gainImage.drawAt(g, 523, 220, 1.0f);
+     */
+    
+    const float labelY = 254;
+    cutoffImage.drawAt(g, 206, labelY, 1.0f);
+    resImage.drawAt(   g, 273, labelY, 1.0f);
+    aImage.drawAt(     g, 353, labelY, 1.0f);
+    dImage.drawAt(     g, 411, labelY, 1.0f);
+    sImage.drawAt(     g, 466, labelY, 1.0f);
+    rImage.drawAt(     g, 524, labelY, 1.0f);
+    gainImage.drawAt(  g, 572, labelY, 1.0f);
     
     g.setFont (16.0f);
 }
@@ -411,12 +421,7 @@ void StocSynthAudioProcessorEditor::resized()
 }
 
 void StocSynthAudioProcessorEditor::comboBoxChanged(ComboBox *comboBox) {
-    if(comboBox == &wavebox) {
-        processor.setParameterNotifyingHost (StocSynthAudioProcessor::WAVE_PARAM,
-                                             comboBox->getSelectedId());
-        
-        repaint();
-    }
+    // No comboboxes as of now
 }
 
 // Updates the GUI periodically from possible host automation

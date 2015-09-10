@@ -14,6 +14,12 @@
   <MAINGROUP id="WlrCXt" name="StocSynth">
     <GROUP id="{55340F18-CF8F-01C5-8BB3-E1A870F61AC2}" name="Source">
       <GROUP id="{A669A682-8184-2970-64D7-5EC952D292EB}" name="Resources">
+        <FILE id="heHqBP" name="panel_overlays.png" compile="0" resource="1"
+              file="Resources/panel_overlays.png"/>
+        <FILE id="dIgPUo" name="knob_overlay.png" compile="0" resource="1"
+              file="Resources/knob_overlay.png"/>
+        <FILE id="i4m9Pr" name="slider_overlay.png" compile="0" resource="1"
+              file="Resources/slider_overlay.png"/>
         <FILE id="DMknoG" name="a.png" compile="0" resource="1" file="Resources/a.png"/>
         <FILE id="ONxoH5" name="amp_title.png" compile="0" resource="1" file="Resources/amp_title.png"/>
         <FILE id="GckMHL" name="cutoff.png" compile="0" resource="1" file="Resources/cutoff.png"/>
