@@ -3,6 +3,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SynthVoice.h"
+#include "Envelope.h"
 
 class StocSynthAudioProcessor  : public AudioProcessor
 {
@@ -45,10 +46,22 @@ public:
 
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+
+    void changeToneAmp(float toneAmp);
+    void changeA135(float a135);
+    void changeA246(float a246);
+    void changeA789(float a789);
+    void changeSub(float sub);
+    void changeVar135(float var135);
+    void changeVar246(float var246);
+    void changeVar789(float var789);
+    void changePitch135(float pitch135);
+    void changePitch246(float pitch246);
+    void changePitch789(float pitch789);
     
-    void changeWaveform(Waveform waveform);
     void changeCutoff(float cutoff);
     void changeRes(float res);
+                   
     void changeAmpA(float a);
     void changeAmpD(float d);
     void changeAmpS(float s);
@@ -56,17 +69,42 @@ public:
     void changeGain(float g);
 
     Synthesiser synth;
+
+    float toneAmp;
+    float a135;
+    float a246;
+    float a789;
+    float sub;
+    float var135;
+    float var246;
+    float var789;
+    float pitch135;
+    float pitch246;
+    float pitch789;
+
     float cutoff;
     float res;
+
     float ampA;
     float ampD;
     float ampS;
     float ampR;
     float gain;
-    
+
     enum Parameters
     {
         WAVE_PARAM = 0,
+        TONE_AMP_PARAM,
+        A135_PARAM,
+        A246_PARAM,
+        A789_PARAM,
+        SUB_PARAM,
+        VAR135_PARAM,
+        VAR246_PARAM,
+        VAR789_PARAM,
+        PITCH135_PARAM,
+        PITCH246_PARAM,
+        PITCH789_PARAM,
         CUTOFF_PARAM,
         RES_PARAM,
         AMP_A_PARAM,
@@ -76,7 +114,7 @@ public:
         GAIN_PARAM,
         totalNumParams
     };
-    
+
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StocSynthAudioProcessor)
 };

@@ -6,6 +6,14 @@
 
 struct CustomLookAndFeel: public LookAndFeel_V3
 {
+    /* Custom look and feel classes. Code copied from the JUCE examples.
+       Classes changed are
+       - drawLinearSliderThumb
+       - drawLinearSliderBackground
+       - drawRotarySlider
+       The rest is here for future reference
+     */
+    
     void drawRoundThumb (Graphics& g, const float x, const float y,
                          const float diameter, const Colour& colour, float outlineThickness)
     {
@@ -385,23 +393,9 @@ void StocSynthAudioProcessorEditor::paint (Graphics& g)
     outline.addRectangle(5, 5, DIM_W - 10, DIM_H - 10);
     g.strokePath(outline, PathStrokeType(2));
     
-    /*
-    outline.addLineSegment(Line<float>(205, 60, 306, 60), 0);
-    g.strokePath(outline, PathStrokeType(2));
-    
-    outline.addLineSegment(Line<float>(328, 60, 565, 60), 0);
-    g.strokePath(outline, PathStrokeType(2));
-     */
-    
     logoImage.drawAt(g, 25, 25, 1.0f);
     
     panelOverlaysImage.drawAt(g, 21, 60, 1.0f);
-    
-    /*
-    oscImage.drawAt(g, 31, 69, 1.0f);
-    filterImage.drawAt(g, 218, 69, 1.0f);
-    ampImage.drawAt(g, 338, 69, 1.0f);
-     */
     
     const float labelY = 254;
     cutoffImage.drawAt(g, 206, labelY, 1.0f);
@@ -432,8 +426,21 @@ void StocSynthAudioProcessorEditor::timerCallback()
 
 void StocSynthAudioProcessorEditor::updateGUIValues()
 {
+    toneKnob.setValue(processor.toneAmp, dontSendNotification);
+    a135Knob.setValue(processor.a135, dontSendNotification);
+    a246Knob.setValue(processor.a246, dontSendNotification);
+    a789Knob.setValue(processor.a789, dontSendNotification);
+    subKnob.setValue(processor.sub, dontSendNotification);
+    var135Knob.setValue(processor.var135, dontSendNotification);
+    var246Knob.setValue(processor.var246, dontSendNotification);
+    var789Knob.setValue(processor.var789, dontSendNotification);
+    pitch135Knob.setValue(processor.pitch135, dontSendNotification);
+    pitch246Knob.setValue(processor.pitch246, dontSendNotification);
+    pitch789Knob.setValue(processor.pitch789, dontSendNotification);
+    
     cutoffSlider.setValue (processor.cutoff, dontSendNotification);
     resSlider.setValue (processor.res, dontSendNotification);
+    
     aSlider.setValue (processor.ampA, dontSendNotification);
     dSlider.setValue (processor.ampD, dontSendNotification);
     sSlider.setValue (processor.ampS, dontSendNotification);
@@ -442,7 +449,10 @@ void StocSynthAudioProcessorEditor::updateGUIValues()
 }
 
 void StocSynthAudioProcessorEditor::sliderValueChanged(Slider *slider) {
-    if(slider == &cutoffSlider) {
+    if(slider == &toneKnob) {
+        processor.setParameterNotifyingHost (StocSynthAudioProcessor::TONE_AMP_PARAM,
+                                             slider->getValue());
+    } else if(slider == &cutoffSlider) {
         processor.setParameterNotifyingHost (StocSynthAudioProcessor::CUTOFF_PARAM,
                                              slider->getValue());
     } else if(slider == &resSlider) {

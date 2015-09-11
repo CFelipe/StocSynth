@@ -22,8 +22,6 @@ public:
 private:
     double phase, phaseDelta, prevOut, level, tailOff, randomPitch, sampleRate;
     Waveform waveform;
-    std::default_random_engine generator;
-    std::normal_distribution<double> distribution;
 };
 
 #endif /* defined(__StocSynth__Oscillator__) */

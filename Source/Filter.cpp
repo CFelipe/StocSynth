@@ -4,8 +4,10 @@
 float Filter::nextSample(float input) {
     buf0 += cutoff * (input - buf0 + feedbackAmount * (buf0 - buf1));
     buf1 += cutoff * (buf0 - buf1);
+    buf2 += cutoff * (buf1 - buf2);
+    buf3 += cutoff * (buf2 - buf3);
     
-    return buf1;
+    return buf3;
 }
 
 void Filter::setSampleRate(float newSampleRate) {

@@ -6,8 +6,6 @@ Oscillator::Oscillator() : phase(0.0),
                            sampleRate(44100.0)
 {
     waveform = Waveform::SINE;
-    distribution = std::normal_distribution<double>(0.0, 10.0);
-
 }
 
 Oscillator::Oscillator(Waveform waveform) : phase(0.0),
@@ -16,7 +14,6 @@ Oscillator::Oscillator(Waveform waveform) : phase(0.0),
                                             sampleRate(44100.0)
 {
     this->waveform = waveform;
-    distribution = std::normal_distribution<double>(0.0, 10.0);
 }
 
 // http://www.martin-finke.de/blog/articles/audio-plugins-018-polyblep-oscillator/
@@ -86,6 +83,5 @@ float Oscillator::getSample()
 
 void Oscillator::setFreq(double freq, double sampleRate)
 {
-    randomPitch = distribution(generator);
-    this->phaseDelta = (freq + randomPitch) * 2 * double_Pi / sampleRate;
+    this->phaseDelta = freq * 2 * double_Pi / sampleRate;
 }

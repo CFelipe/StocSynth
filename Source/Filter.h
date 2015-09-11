@@ -17,7 +17,10 @@ public:
     cutoff(0.5),
     res(0.1),
     buf0(0.0),
-    buf1(0.0) {
+    buf1(0.0),
+    buf2(0.0),
+    buf3(0.0)
+    {
         calculateFeedbackAmount();
     };
 
@@ -27,6 +30,8 @@ private:
     float res;
     float buf0;
     float buf1;
+    float buf2;
+    float buf3;
     float feedbackAmount;
     inline void calculateFeedbackAmount() { feedbackAmount = res + res/(1.0 - cutoff); }
 };
