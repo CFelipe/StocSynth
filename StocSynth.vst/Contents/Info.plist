@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AudioComponents</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>Synthesizer based on stochastic processes</string>
+			<key>factoryFunction</key>
+			<string>StocAUFactory</string>
+			<key>manufacturer</key>
+			<string>FCor</string>
+			<key>name</key>
+			<string>felipecortez: StocSynth</string>
+			<key>subtype</key>
+			<string>Stoc</string>
+			<key>type</key>
+			<string>aumu</string>
+			<key>version</key>
+			<integer>65536</integer>
+		</dict>
+	</array>
+	<key>BuildMachineOSBuild</key>
+	<string>14A389</string>
+	<key>CFBundleExecutable</key>
+	<string>StocSynth</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.felipecortez.StocSynth</string>
+	<key>CFBundleName</key>
+	<string>StocSynth</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleSignature</key>
+	<string>PTul</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	<key>DTCompiler</key>
+	<string>com.apple.compilers.llvm.clang.1_0</string>
+	<key>DTPlatformBuild</key>
+	<string>6D570</string>
+	<key>DTPlatformVersion</key>
+	<string>GM</string>
+	<key>DTSDKBuild</key>
+	<string>14D125</string>
+	<key>DTSDKName</key>
+	<string>macosx10.10</string>
+	<key>DTXcode</key>
+	<string>0630</string>
+	<key>DTXcodeBuild</key>
+	<string>6D570</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Felipe Cortez</string>
+</dict>
+</plist>
